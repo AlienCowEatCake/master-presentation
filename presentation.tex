@@ -1,0 +1,98 @@
+\documentclass[aspectratio=43]{beamer}
+
+% Русский язык (LaTeX)
+\usepackage[T1,T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+
+% Картинки
+\usepackage{graphicx}
+% Каталог для картинок
+\graphicspath{ {./images/} }
+
+% Разные таблицы
+\usepackage{tabularx, multirow, tabu}
+\newcolumntype{L}[1]{>{\hsize=#1\hsize\raggedright\arraybackslash}X}
+\newcolumntype{R}[1]{>{\hsize=#1\hsize\raggedleft\arraybackslash}X}
+\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
+
+% Таблицы и рисунки по ГОСТу
+\usepackage[tableposition=top, singlelinecheck=false]{caption}
+\DeclareCaptionLabelFormat{gostfigure}{Рисунок #2}\DeclareCaptionLabelFormat{gosttable}{Таблица #2}
+\DeclareCaptionLabelSeparator{gost}{~---~}
+\captionsetup{labelsep=gost}
+\captionsetup*[figure]{labelformat=gostfigure, justification=centering}
+\captionsetup*[table]{labelformat=gosttable, justification=raggedright}
+\usepackage{subfig}
+\renewcommand{\thesubfigure}{\asbuk{subfigure}}
+% в рисунках: h - "хотелось бы картинку здесь"; h! - "очень хочу картинку здесь"; H - "ХОЧУ картинку здесь и баста", p - на отдельной странице, t - сверху
+% Управление плавающими штуковинами (рисунками, таблицами, etc)
+\usepackage{float}
+
+% Запрет висячих строк
+\clubpenalty=10000
+\widowpenalty=10000
+
+% Для формул
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsbsy}
+
+% Удобные ссылки на электронные ресурсы
+\usepackage{url}
+\renewcommand\UrlFont{}
+
+% Минимальное количество букв, которые можно переносить
+\righthyphenmin=2
+
+% Борьба с overfull
+\tolerance=300000
+
+% Перенос знаков во внутритекстовых формулах (использовать так $a\hm+b\hm+c\hm+d$)
+%\newcommand*{\hm}[1]{#1\nobreak\discretionary{}{\hbox{$\mathsurround=0pt #1$}}{}}
+% Можно также просто запретить переносить знаки операций и отношений
+\binoppenalty=10000
+\relpenalty=10000
+
+%
+\title{Анализ систем источник-приёмник в задачах морской геоэлектрики}
+\author{Жигалов Петр Сергеевич}
+\institute{Новосибирский государственный технический университет \newline
+Факультет прикладной математики и информатики \newline
+Кафедра вычислительных технологий}
+\date{2016 г.}
+
+% Команды и сокращения
+\renewcommand{\Re}{\mathop{\mathrm{Re}}\nolimits}
+\renewcommand{\Im}{\mathop{\mathrm{Im}}\nolimits}
+\newcommand{\Jmp}[1]{[\![ { #1 } ]\!]}
+\newcommand{\Avg}[1]{\{\!\!\{ { #1 } \}\!\!\}}
+\newcommand{\Flux}[1]{\reallywidehat{ #1 } }
+\newcommand{\CalTau}{\mathcal{T}}
+\newcommand{\CalEps}{\mathcal{E}}
+\newcommand{\CalF}{\mathcal{F}}
+\renewcommand{\log}{\mathop{\mathrm{log}}\nolimits}
+\newcommand{\CodeFont}[1]{{\small{\texttt{#1}}}}
+
+% Тема
+% https://www.hartwork.org/beamer-theme-matrix/
+\usetheme{Rochester}
+\usecolortheme{whale}
+
+% =============================================================================
+
+\begin{document}
+
+\begin{frame}
+	\titlepage
+\end{frame}
+
+\begin{frame}
+	\frametitle{что вы хотите написать в заголовке \hfill \insertframenumber{} }
+	
+\end{frame}
+
+\end{document}
+
