@@ -75,6 +75,7 @@
 \newcommand{\CalF}{\mathcal{F}}
 \renewcommand{\log}{\mathop{\mathrm{log}}\nolimits}
 \newcommand{\CodeFont}[1]{{\small{\texttt{#1}}}}
+\newcommand{\MakeTitle}[1]{\frametitle{\hspace{1.5em}\textbf{#1} \hfill \insertframenumber{} }}
 
 % Тема
 % https://www.hartwork.org/beamer-theme-matrix/
@@ -89,10 +90,219 @@
 	\titlepage
 \end{frame}
 
+% =============================================================================
+
 \begin{frame}
-	\frametitle{что вы хотите написать в заголовке \hfill \insertframenumber{} }
+	\MakeTitle{Цели и задачи}
+	\textbf{Цель работы:} решение трёхмерной прямой задачи морской геоэлектрики векторным методом конечных элементов
+	\newline\newline
+	\textbf{Задачи:}
+	\begin{itemize}
+		\item Исследование влияния слоя воздуха при различной глубине источника электромагнитного возмущения
+		\item Исследование целесообразности применения PML-слоя для ограничения области моделирования в задачах морской геоэлектрики на низких частотах
+		\item Исследование поведения электромагнитного поля при различном расположении источника поля и искомого объекта друг относительно друга
+	\end{itemize}
+\end{frame}
+
+% =============================================================================
+
+\begin{frame}
+	\MakeTitle{Задачи морской геоэлектрики}
+	\begin{figure}[ht]
+		\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{10000000000004B4000002D101BC1A4D.png}
+	\end{figure}
+\end{frame}
+
+% =============================================================================
+
+\begin{frame}
+	\MakeTitle{Математическая модель}
+	\textbf{Уравнение Гельмгольца:}
+	\begin{equation}
+		\nabla \times ( \mu^{-1} \nabla \times \mathbf{E} ) + k^{2} \mathbf{E} = - i \omega \mathbf{J} , \text{~~~} k^{2} = i \omega \sigma - \omega^{2} \varepsilon \label{eq:helmholtz}
+	\end{equation}
+
+	\begin{small}
+	$\mathbf{E}$~--~напряжённость электрического поля~(В/м), \\
+	$\sigma$~--~электрическая проводимость~(См/м), \\
+	$\varepsilon = \varepsilon_r \varepsilon_0$~--~диэлектрическая проницаемость~(Ф/м), \\
+	$\mu = \mu_r \mu_0$~--~магнитная проницаемость~(Гн/м), \\
+	$\mathbf{J}$~--~плотность стороннего электрического тока~(А/м${}^2$).
+	\end{small}
+%	
+	\newline\newline
+	\textbf{Краевые условия:}
+	\begin{equation}
+		\left. \mathbf{E} \times \mathbf{n} \right | _{ S_1 } = {\mathbf{E}} ^g , \label{eq:bound1}
+	\end{equation}
+	\begin{equation}
+		\left. \sigma \mathbf{E} \cdot \mathbf{n} \right | _{ S_2 } = 0 . \label{eq:bound2}
+	\end{equation}
 	
 \end{frame}
+
+% =============================================================================
+
+\begin{frame}
+	\MakeTitle{Вариационная постановка}
+	\textbf{Пространства:}
+	\begin{equation*}
+		\mathbb{H} ( \mathrm{rot}\,, \Omega ) = \lbrace \mathbf{v} \in [\mathbb{L}^{2}(\Omega)]^{3} : \nabla \times \mathbf{v} \in [\mathbb{L}^{2}(\Omega)]^{3} \rbrace , \label{eq:H_rot}
+	\end{equation*}
+	\begin{equation*}
+		\mathbb{H}_{0}( \mathrm{rot}\,, \Omega ) = \lbrace \mathbf{v} \in \mathbb{H}(\mathrm{rot}\,, \Omega) : \left. \mathbf{v} \times \mathbf{n} \right|_{\partial \Omega} = 0  \rbrace . \label{eq:H0_rot}
+	\end{equation*}
+%	
+	\newline\newline
+	\textbf{Вариационная постановка:} Найти $\mathbf{E} \in \mathbb{H}_{0}( \mathrm{rot}\,, \Omega )$, такое что $\forall \mathbf{v} \in \mathbb{H}_{0}( \mathrm{rot}\,, \Omega )$ будет выполнено:
+	\begin{equation}
+		\int\limits_\Omega \mu^{-1} \nabla \times \mathbf{E} \cdot \nabla \times \overline{\mathbf{v}} \,d\Omega + \int\limits_\Omega k^{2} \mathbf{E} \cdot \overline{\mathbf{v}} \,d\Omega = - \int\limits_\Omega i \omega \mathbf{J} \cdot \overline{\mathbf{v}} \,d\Omega . \label{eq:weak}
+	\end{equation}
+\end{frame}
+
+% =============================================================================
+
+\begin{frame}
+	\MakeTitle{PML-слой}
+	\textbf{Комплексное растяжение координат:}
+	\begin{equation*}
+		\tilde{x} = \int\limits_0^x s_x (t) \,dt ,
+		\text{~~~~~}
+		\tilde{y} = \int\limits_0^y s_y (t) \,dt ,
+		\text{~~~~~}
+		\tilde{z} = \int\limits_0^z s_z (t) \,dt ,
+	\end{equation*}
+	\begin{equation*}
+		\begin{cases}
+		\displaystyle
+		s_j(\tau) = 1 \text{~~--~вне PML-слоя,} \\
+		\displaystyle
+		s_j(\tau) = 1 + \chi \left( \frac{d(\tau)}{\delta} \right)^m , \text{~~} m \geq 1 \text{~~--~внутри PML-слоя,}
+		\label{eq:pml_s}
+		\end{cases}
+	\end{equation*}
+	где $d(\tau)$ -- расстояние в $j$-м направлении от внутренней границы PML-слоя, $\delta$ -- толщина PML-слоя, $\chi$ -- некоторое комплексное число, причём $\Re(\chi) \ge 0$, $\Im(\chi) \ge 0$.
+\end{frame}
+
+% =============================================================================
+
+\begin{frame}
+	\MakeTitle{Вариационная постановка с PML-слоем}
+	\textbf{Оператор $\nabla$ в новых координатах:}
+	\begin{equation*}
+		\tilde{\nabla} = \left[ \frac{1}{s_x} \frac{\partial}{\partial x} \,, \frac{1}{s_y} \frac{\partial}{\partial y} \,, \frac{1}{s_z} \frac{\partial}{\partial z} \right] .
+	\end{equation*}
+
+	\textbf{Вариационная постановка:}\newline Найти $\mathbf{E} \in \mathbb{H}_{0}( \mathrm{rot}\,, \widehat{\Omega} = \Omega \setminus {\Omega^{PML}} )$ и  $\tilde{\mathbf{E}} \in \mathbb{H}_{0}( \mathrm{rot}\,, {\Omega^{PML}} )$, такие что $\forall \mathbf{v} \in \mathbb{H}_{0}( \mathrm{rot}\,, \widehat{\Omega} )$ и $\forall \tilde{\mathbf{v}} \in \mathbb{H}_{0}( \mathrm{rot}\,, {\Omega^{PML}} )$ будет выполнено:
+\begin{equation*}
+	\begin{cases}
+		\displaystyle
+		\int\limits_{\widehat{\Omega}} \mu^{-1} \nabla \times \mathbf{E} \cdot \nabla \times \overline{\mathbf{v}} \,d\widehat{\Omega} + \int\limits_{\widehat{\Omega}} k^{2} \mathbf{E} \cdot \overline{\mathbf{v}} \,d\widehat{\Omega} = - \int\limits_{\widehat{\Omega}} i \omega \mathbf{J} \cdot \overline{\mathbf{v}} \,d\widehat{\Omega} \\
+		\displaystyle
+		\int\limits_{{\Omega^{PML}}} \mu^{-1} \tilde{\nabla} \times \tilde{\mathbf{E}} \cdot \tilde{\nabla} \times \tilde{\overline{\mathbf{v}}} \,d{\Omega^{PML}} + \int\limits_{{\Omega^{PML}}} k^{2} \tilde{\mathbf{E}} \cdot \tilde{\overline{\mathbf{v}}} \,d{\Omega^{PML}} = 0 . \\
+	\end{cases}
+\end{equation*}
+\end{frame}
+
+% =============================================================================
+
+\begin{frame}
+	\MakeTitle{Исследование влияния слоя воздуха}
+	\textbf{Описание расчётной области}
+	\begin{columns}[t,totalwidth=\linewidth]
+		\begin{column}{.5\linewidth}
+			\vspace{-3em}
+			\begin{figure}[ht]
+				\includegraphics[width=1.1\textwidth,height=1.1\textheight,keepaspectratio]{area_3layers_shift_3.eps}
+			\end{figure}
+    	\end{column}
+    	\begin{column}{.04\linewidth}
+    	\end{column}
+		\begin{column}{.8\linewidth}
+			\\
+			\begin{small}
+			$\Omega_1$ -- воздух ($\sigma=10^{-6}$ См/м); \\
+			$\Omega_2$ -- морская вода ($\sigma=3.3$ См/м); \\
+			$\Omega_3$ -- грунт ($\sigma=0.2$ См/м); \\
+			$\Omega_4$ -- углеводороды ($\sigma=10^{-2}$~См/м); \\
+			$L_1 = L_2 = L_3 = 6000$~м; \\
+			$h_1=600$~м; $h_2=135$~м; \\
+			$h_3=75$~м; $l_1=400$~м; \\
+			$d=100$~м; $\nu=1$~Гц. \\
+			$h$ варьируется в ходе исследования.
+			\end{small}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+% =============================================================================
+
+\begin{frame}
+	\MakeTitle{Исследование влияния слоя воздуха}
+	\textbf{Относительная разность решений при изменении глубины петли $h$:}
+	\begin{small}
+	\begin{table}[ht]
+		\begin{tabularx}{\textwidth}{|C{2.89}|C{0.73}|C{0.73}|C{0.73}|C{0.73}|C{0.73}|C{0.73}|C{0.73}|}
+			\hline Глубина петли & 5 & 10 & 50 & 100 & 200 & 300 & 400 \\
+			\hline $\displaystyle \frac{\| \mathbf{E}^{air} - \mathbf{E}^{noair} \|_{\mathbb{L}^2}}{\| \mathbf{E}^{air} \|_{\mathbb{L}^2}}$ & 0.44 & 0.40 & 0.24 & 0.14 & 0.07 & 0.04 & 0.02 \\
+			\hline
+		\end{tabularx}
+	\end{table}
+	\end{small}
+	\vspace{-1em}
+	\begin{figure}[ht]
+		\includegraphics[scale=0.7]{presentation.eps}
+	\label{fig:res1:graph}
+	\end{figure}
+\end{frame}
+
+% =============================================================================
+
+\begin{frame}
+	\MakeTitle{Исследование влияния слоя воздуха}
+	\textbf{$\Re(\mathbf{E}_y)$ по линии $y=0$, $z=-610$:}
+	\begin{columns}[t,totalwidth=\linewidth]
+		\begin{column}{.5\linewidth}
+			\vspace{-1.7em}
+			\begin{center}
+			\includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio]{deep_-5.eps} \\
+			\vspace{-0.1em}
+			\tiny{$h=-5$} \\
+			\includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio]{deep_-200.eps} \\
+			\vspace{-0.1em}
+			\tiny{$h=-200$} \\
+			\end{center}
+		\end{column}
+		\begin{column}{.5\linewidth}
+			\vspace{-1.7em}
+			\begin{center}
+			\includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio]{deep_-50.eps} \\
+			\vspace{-0.1em}
+			\tiny{$h=-50$} \\
+			\includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio]{deep_-300.eps} \\
+			\vspace{-0.1em}
+			\tiny{$h=-300$} \\
+			\end{center}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+% =============================================================================
+
+\begin{frame}
+	\MakeTitle{Заключение}
+	В работе были реализованы алгоритмы на базе векторного метода конечных элементов. Эти алгоритмы были положены в основу программного комплекса, который позволяет моделировать электромагнитные поля в областях разнообразной структуры. С помощью этого программного комплекса были решены модельные задачи морской геоэлектрики на низких частотах, проведены исследования возможности сокращения области моделирования без внесения дополнительных погрешностей.
+
+	На основании исследований были сделаны выводы, что расчёты, в которых в область моделирования не включается воздух, допустимы только при расположении источника электромагнитного поля на большой глубине, иначе, из-за неправильного учёта физических процессов, происходящих в воздухе, полученное решение будет неверным.
+
+	Применение PML-слоя позволило получить достаточно точные решения, однако его применение не привело к резкому уменьшению размерности систем уравнений и, как следствие, к уменьшению времени решения. Было выдвинуто предположение, что увеличить эффективность применения PML-слоя можно с помощью применения неконформных методов, в которых конечноэлементная сетка может содержать геометрические носители разного типа: тетраэдры и параллелепипеды.
+
+	Расчёты на модельной задаче с проводящим и непроводящим объектами показали, что проводящий объект хорошо <<виден>> на некотором расстоянии от морского дна, а непроводящий -- только вблизи дна или при небольшом заглублении приёмника в грунт. Наибольший отклик на источник электромагнитного возмущения для непроводящего объекта наблюдался в том случае, когда источник располагался со смещением от центра симметрии объекта.
+\end{frame}
+
+
+% =============================================================================
+
 
 \end{document}
 
