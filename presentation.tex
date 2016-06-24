@@ -15,6 +15,7 @@
 \newcolumntype{L}[1]{>{\hsize=#1\hsize\raggedright\arraybackslash}X}
 \newcolumntype{R}[1]{>{\hsize=#1\hsize\raggedleft\arraybackslash}X}
 \newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
+\newcolumntype{N}[1]{@{}>{\hsize=#1\hsize\centering\arraybackslash}X}
 
 % Таблицы и рисунки по ГОСТу
 \usepackage[tableposition=top, singlelinecheck=false]{caption}
@@ -129,7 +130,7 @@
 	$\mu = \mu_r \mu_0$~--~магнитная проницаемость~(Гн/м), \\
 	$\mathbf{J}$~--~плотность стороннего электрического тока~(А/м${}^2$).
 	\end{small}
-%	
+%
 	\newline\newline
 	\textbf{Краевые условия:}
 	\begin{equation}
@@ -138,7 +139,7 @@
 	\begin{equation}
 		\left. \sigma \mathbf{E} \cdot \mathbf{n} \right | _{ S_2 } = 0 . \label{eq:bound2}
 	\end{equation}
-	
+
 \end{frame}
 
 % =============================================================================
@@ -152,12 +153,25 @@
 	\begin{equation*}
 		\mathbb{H}_{0}( \mathrm{rot}\,, \Omega ) = \lbrace \mathbf{v} \in \mathbb{H}(\mathrm{rot}\,, \Omega) : \left. \mathbf{v} \times \mathbf{n} \right|_{\partial \Omega} = 0  \rbrace . \label{eq:H0_rot}
 	\end{equation*}
-%	
+%
 	\newline\newline
 	\textbf{Вариационная постановка:} Найти $\mathbf{E} \in \mathbb{H}_{0}( \mathrm{rot}\,, \Omega )$, такое что $\forall \mathbf{v} \in \mathbb{H}_{0}( \mathrm{rot}\,, \Omega )$ будет выполнено:
 	\begin{equation}
 		\int\limits_\Omega \mu^{-1} \nabla \times \mathbf{E} \cdot \nabla \times \overline{\mathbf{v}} \,d\Omega + \int\limits_\Omega k^{2} \mathbf{E} \cdot \overline{\mathbf{v}} \,d\Omega = - \int\limits_\Omega i \omega \mathbf{J} \cdot \overline{\mathbf{v}} \,d\Omega . \label{eq:weak}
 	\end{equation}
+\end{frame}
+
+% =============================================================================
+
+\begin{frame}
+	\MakeTitle{PML-слой}
+	\textbf{PML-слой} $\Omega^{PML}$ является подобластью $\Omega$ со специальными коэффициентами, построенными таким образом, чтобы обеспечить полное поглощение электрического поля внутри слоя и не допустить его отражения от внутренних границ и прохождения через внешние границы слоя.\\
+	\vspace{0.5em}
+	Расчётные области без PML-слоя и с PML-слоем:
+	\vspace{-1.25em}
+	\begin{figure}[H]
+		\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{area_3layers_PML.eps}
+	\end{figure}
 \end{frame}
 
 % =============================================================================
@@ -215,9 +229,9 @@
 			\begin{figure}[ht]
 				\includegraphics[width=1.1\textwidth,height=1.1\textheight,keepaspectratio]{area_3layers_shift_3.eps}
 			\end{figure}
-    	\end{column}
-    	\begin{column}{.04\linewidth}
-    	\end{column}
+	\end{column}
+	\begin{column}{.04\linewidth}
+	\end{column}
 		\begin{column}{.8\linewidth}
 			\\
 			\begin{small}
@@ -267,10 +281,10 @@
 			\begin{center}
 			\includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio]{deep_-5.eps} \\
 			\vspace{-0.1em}
-			\tiny{$h=-5$} \\
+			\tiny{$h=5$~м} \\
 			\includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio]{deep_-200.eps} \\
 			\vspace{-0.1em}
-			\tiny{$h=-200$} \\
+			\tiny{$h=200$~м} \\
 			\end{center}
 		\end{column}
 		\begin{column}{.5\linewidth}
@@ -278,10 +292,121 @@
 			\begin{center}
 			\includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio]{deep_-50.eps} \\
 			\vspace{-0.1em}
-			\tiny{$h=-50$} \\
+			\tiny{$h=50$~м} \\
 			\includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio]{deep_-300.eps} \\
 			\vspace{-0.1em}
-			\tiny{$h=-300$} \\
+			\tiny{$h=300$~м} \\
+			\end{center}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+% =============================================================================
+
+\begin{frame}
+	\MakeTitle{Исследование эффективности PML-слоя}
+	\textbf{Описание расчётной области}
+	\begin{columns}[t,totalwidth=\linewidth]
+		\begin{column}{.5\linewidth}
+			\vspace{-3em}
+			\begin{figure}[ht]
+				\includegraphics[width=1.1\textwidth,height=1.1\textheight,keepaspectratio]{area_3layers_3.eps}
+			\end{figure}
+	\end{column}
+	\begin{column}{.04\linewidth}
+	\end{column}
+		\begin{column}{.8\linewidth}
+			\\
+			\begin{small}
+			$\Omega_1$ -- воздух ($\sigma=10^{-6}$ См/м); \\
+			$\Omega_2$ -- морская вода ($\sigma=3.3$ См/м); \\
+			$\Omega_3$ -- грунт ($\sigma=0.2$ См/м); \\
+			$\Omega_4$ -- углеводороды ($\sigma=10^{-2}$~См/м); \\
+			$L_1 = L_2 = L_3 = 6000$~м; \\
+			$h_1=300$~м; $h_2=100$~м; \\
+			$h_3=100$~м; $l_1=400$~м; \\
+			$d=100$~м; $\nu=1$~Гц; \\
+			$h=5$~м.
+			\end{small}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+% =============================================================================
+
+\begin{frame}
+	\MakeTitle{Исследование эффективности PML-слоя}
+
+	\textbf{Варьирование коэффициентов растяжения:}
+	\vspace{0.5em}
+	\fontsize{9}{12}\selectfont {
+	\begin{tabularx}{\textwidth}{|N{0.7}|N{0.7}|N{0.7}|N{0.7}|N{0.7}|N{0.7}|C{2.9}|C{0.95}|C{0.95}|}
+		\hline $\Re(\chi)$ в~$\Omega_1$ & $\Im(\chi)$ в~$\Omega_1$ & $\Re(\chi)$ в~$\Omega_2$ & $\Im(\chi)$ в~$\Omega_2$ & $\Re(\chi)$ в~$\Omega_3$ & $\Im(\chi)$ в~$\Omega_3$ & \raisebox{-0.8em}{$\smash{\displaystyle \frac{\lVert \Re(\mathbf{E}_y^{\text{бак}} - \mathbf{E}_y^{\text{PML}})\rVert}{\lVert \Re(\mathbf{E}_y^{\text{бак}})\rVert}}$} & Время, бак & Время, PML \\[0.2em]
+		\hline 3 & 0 & 1 & 5 & 3 & 1 & 0.106636 & \multirow{4}{*}{650} & 592 \\
+		\cline{1-7}\cline{9-9} 3 & 1 & 0 & 6 & 2 & 1 & 0.0925 & & 599 \\
+		\cline{1-7}\cline{9-9} 4 & 0 & 1 & 5 & 3 & 1 & 0.0947 & & 731 \\
+		\cline{1-7}\cline{9-9} 4 & 1 & 0 & 6 & 2 & 1 & 0.0910 & & 591 \\
+		\hline
+	\end{tabularx}
+	}
+
+	\begin{columns}[t,totalwidth=1.05\linewidth]
+		\hspace{-0.055\linewidth}
+		\begin{column}{.52\linewidth}
+	\textbf{\\Варьирование толщины PML-слоя:}
+	\vspace{0.5em}
+	\fontsize{9}{12}\selectfont {
+	\begin{tabularx}{\textwidth}{|N{0.3}|N{2.3}|N{0.7}|N{0.7}|}
+		\hline \raisebox{-0.8em}[0.8em]{$\smash{\displaystyle \delta_k}$} & \raisebox{-0.8em}[0.8em]{$\smash{\displaystyle \frac{\lVert \Re(\mathbf{E}_y^{\text{бак}} - \mathbf{E}_y^{\text{PML}})\rVert}{\lVert \Re(\mathbf{E}_y^{\text{бак}})\rVert}}$} & Время, бак & Время, PML \\[0.2em]
+		\hline 80 & 0.1199 & 673 & 1289 \\
+		\hline 100 & 0.0910 & 650 & 591 \\
+		\hline 120 & 0.0784 & 609 & 1142 \\
+		\hline
+	\end{tabularx}
+	}
+		\end{column}
+
+		\begin{column}{.52\linewidth}
+	\textbf{Варьирование размера области, на границе которой вводится PML-слой:}
+	\vspace{0.5em}
+	\fontsize{9}{12}\selectfont {
+	\begin{tabularx}{\textwidth}{|N{0.3}|N{2.3}|N{0.7}|N{0.7}|}
+		\hline \raisebox{-0.8em}[0.8em]{$\smash{\displaystyle \l_k}$} & \raisebox{-0.8em}[0.8em]{$\smash{\displaystyle \frac{\lVert \Re(\mathbf{E}_y^{\text{бак}} - \mathbf{E}_y^{\text{PML}})\rVert}{\lVert \Re(\mathbf{E}_y^{\text{бак}})\rVert}}$} & Время, бак & Время, PML \\[0.2em]
+		\hline 500 & 0.187456 & 628 & 587 \\
+		\hline 600 & 0.0909998 & 650 & 591 \\
+		\hline 800 & 0.0440642 & 718 & 658 \\
+		\hline
+	\end{tabularx}
+	}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+% =============================================================================
+
+\begin{frame}
+	\MakeTitle{Исследование эффективности PML-слоя}
+	\textbf{Картины электрического поля при параметрах $\chi_{\Omega_1} = (4, 0)$, $\chi_{\Omega_2} = (1, 6)$, $\chi_{\Omega_2} = (3, 2)$ $m=3$, $l_k = 600$~м и $\delta_k = 100$~м, в сечении плоскостью $y=0$:}
+	\begin{columns}[t,totalwidth=\linewidth]
+		\hspace{-0.07\linewidth}
+		\begin{column}{.5\linewidth}
+			\vspace{-2.75em}
+			\begin{figure}[H]
+				\includegraphics[width=1.1\textwidth,height=1.1\textheight,keepaspectratio]{airloop_std_y=0_EyR.eps}
+			\end{figure}
+			\begin{center}
+				\vspace{-1em}
+				\tiny{Решение с <<большим баком>>}
+			\end{center}
+	\end{column}
+		\begin{column}{.5\linewidth}
+			\vspace{-2.75em}
+			\begin{figure}[H]
+				\includegraphics[width=1.1\textwidth,height=1.1\textheight,keepaspectratio]{airloop_pml_y=0_EyR.eps}
+			\end{figure}
+			\begin{center}
+				\vspace{-1em}
+				\tiny{Решение с PML-слоем}
 			\end{center}
 		\end{column}
 	\end{columns}
