@@ -1,4 +1,4 @@
-\documentclass[aspectratio=43]{beamer}
+\documentclass[aspectratio=43,usepdftitle=false]{beamer}
 
 % Русский язык (LaTeX)
 \usepackage[T1,T2A]{fontenc}
@@ -60,10 +60,9 @@
 %
 \title{Анализ систем источник-приёмник в задачах морской геоэлектрики}
 \author{Жигалов Петр Сергеевич}
-\institute{Новосибирский государственный технический университет \newline
-Факультет прикладной математики и информатики \newline
-Кафедра вычислительных технологий}
-\date{2016 г.}
+\institute{Новосибирский государственный технический университет}
+\date{27 июня 2016 г.}
+\hypersetup{unicode=true, pdftitle={\inserttitle}, pdfauthor={\insertauthor}, pdfsubject={\inserttitle}}
 
 % Команды и сокращения
 \renewcommand{\Re}{\mathop{\mathrm{Re}}\nolimits}
@@ -82,6 +81,37 @@
 % https://www.hartwork.org/beamer-theme-matrix/
 \usetheme{Rochester}
 \usecolortheme{whale}
+
+% Не нужно делать элементы управления презентацией
+\setbeamertemplate{navigation symbols}{}
+
+% Стилизация титульной страницы
+\defbeamertemplate*{title page}{customized}[1][]
+{
+	\frametitle{%
+		\raisebox{2.25em}[0pt][0pt]{\makebox[0pt][l]{\textbf{\small{\insertinstitute}}}}%
+		\raisebox{1.5em}[0pt][0pt]{\makebox[0pt][l]{\small{Факультет прикладной математики и информатики}}}%
+		\raisebox{0.75em}[0pt][0pt]{\makebox[0pt][l]{\footnotesize{Кафедра вычислительных технологий}}}%
+		\hfill \includegraphics[scale=0.242]{NSTU_Logo_blue.eps}%
+	}
+	\vfill
+	\vfill
+	\begin{beamercolorbox}[rounded=true, center]{frametitle}
+		\usebeamerfont{title}\Large{\inserttitle}
+	\end{beamercolorbox}
+	\begin{center}
+		\usebeamerfont{author}\insertauthor
+	\end{center}
+	\vfill
+	\usebeamerfont{author}\footnotesize{Научный руководитель: д.т.н., проф. Шурина Элла Петровна}
+	\vfill
+	\vfill
+	\begin{center}
+		\usebeamerfont{date}\small{Новосибирск}
+		\par\noindent
+		\usebeamerfont{date}\small{\insertdate}
+	\end{center}
+}
 
 % =============================================================================
 
@@ -147,12 +177,12 @@
 \begin{frame}
 	\MakeTitle{Вариационная постановка}
 	\textbf{Пространства:}
-	\begin{equation*}
+	\begin{equation}
 		\mathbb{H} ( \mathrm{rot}\,, \Omega ) = \lbrace \mathbf{v} \in [\mathbb{L}^{2}(\Omega)]^{3} : \nabla \times \mathbf{v} \in [\mathbb{L}^{2}(\Omega)]^{3} \rbrace , \label{eq:H_rot}
-	\end{equation*}
-	\begin{equation*}
+	\end{equation}
+	\begin{equation}
 		\mathbb{H}_{0}( \mathrm{rot}\,, \Omega ) = \lbrace \mathbf{v} \in \mathbb{H}(\mathrm{rot}\,, \Omega) : \left. \mathbf{v} \times \mathbf{n} \right|_{\partial \Omega} = 0  \rbrace . \label{eq:H0_rot}
-	\end{equation*}
+	\end{equation}
 %
 	\newline\newline
 	\textbf{Вариационная постановка:} Найти $\mathbf{E} \in \mathbb{H}_{0}( \mathrm{rot}\,, \Omega )$, такое что $\forall \mathbf{v} \in \mathbb{H}_{0}( \mathrm{rot}\,, \Omega )$ будет выполнено:
@@ -179,14 +209,14 @@
 \begin{frame}
 	\MakeTitle{PML-слой}
 	\textbf{Комплексное растяжение координат:}
-	\begin{equation*}
+	\begin{equation}
 		\tilde{x} = \int\limits_0^x s_x (t) \,dt ,
 		\text{~~~~~}
 		\tilde{y} = \int\limits_0^y s_y (t) \,dt ,
 		\text{~~~~~}
 		\tilde{z} = \int\limits_0^z s_z (t) \,dt ,
-	\end{equation*}
-	\begin{equation*}
+	\end{equation}
+	\begin{equation}
 		\begin{cases}
 		\displaystyle
 		s_j(\tau) = 1 \text{~~--~вне PML-слоя,} \\
@@ -194,7 +224,7 @@
 		s_j(\tau) = 1 + \chi \left( \frac{d(\tau)}{\delta} \right)^m , \text{~~} m \geq 1 \text{~~--~внутри PML-слоя,}
 		\label{eq:pml_s}
 		\end{cases}
-	\end{equation*}
+	\end{equation}
 	где $d(\tau)$ -- расстояние в $j$-м направлении от внутренней границы PML-слоя, $\delta$ -- толщина PML-слоя, $\chi$ -- некоторое комплексное число, причём $\Re(\chi) \ge 0$, $\Im(\chi) \ge 0$.
 \end{frame}
 
@@ -203,19 +233,19 @@
 \begin{frame}
 	\MakeTitle{Вариационная постановка с PML-слоем}
 	\textbf{Оператор $\nabla$ в новых координатах:}
-	\begin{equation*}
+	\begin{equation}
 		\tilde{\nabla} = \left[ \frac{1}{s_x} \frac{\partial}{\partial x} \,, \frac{1}{s_y} \frac{\partial}{\partial y} \,, \frac{1}{s_z} \frac{\partial}{\partial z} \right] .
-	\end{equation*}
+	\end{equation}
 
 	\textbf{Вариационная постановка:}\newline Найти $\mathbf{E} \in \mathbb{H}_{0}( \mathrm{rot}\,, \widehat{\Omega} = \Omega \setminus {\Omega^{PML}} )$ и  $\tilde{\mathbf{E}} \in \mathbb{H}_{0}( \mathrm{rot}\,, {\Omega^{PML}} )$, такие что $\forall \mathbf{v} \in \mathbb{H}_{0}( \mathrm{rot}\,, \widehat{\Omega} )$ и $\forall \tilde{\mathbf{v}} \in \mathbb{H}_{0}( \mathrm{rot}\,, {\Omega^{PML}} )$ будет выполнено:
-\begin{equation*}
+\begin{eqnarray}
 	\begin{cases}
 		\displaystyle
 		\int\limits_{\widehat{\Omega}} \mu^{-1} \nabla \times \mathbf{E} \cdot \nabla \times \overline{\mathbf{v}} \,d\widehat{\Omega} + \int\limits_{\widehat{\Omega}} k^{2} \mathbf{E} \cdot \overline{\mathbf{v}} \,d\widehat{\Omega} = - \int\limits_{\widehat{\Omega}} i \omega \mathbf{J} \cdot \overline{\mathbf{v}} \,d\widehat{\Omega} \\
 		\displaystyle
 		\int\limits_{{\Omega^{PML}}} \mu^{-1} \tilde{\nabla} \times \tilde{\mathbf{E}} \cdot \tilde{\nabla} \times \tilde{\overline{\mathbf{v}}} \,d{\Omega^{PML}} + \int\limits_{{\Omega^{PML}}} k^{2} \tilde{\mathbf{E}} \cdot \tilde{\overline{\mathbf{v}}} \,d{\Omega^{PML}} = 0 . \\
 	\end{cases}
-\end{equation*}
+\end{eqnarray}
 \end{frame}
 
 % =============================================================================
@@ -242,8 +272,8 @@
 			$L_1 = L_2 = L_3 = 6000$~м; \\
 			$h_1=600$~м; $h_2=135$~м; \\
 			$h_3=75$~м; $l_1=400$~м; \\
-			$d=100$~м; $\nu=1$~Гц. \\
-			$h$ варьируется в ходе исследования.
+			$d=100$~м; $\nu=1$~Гц; \\
+			$h \in \{ 5, 10, 50, 100, 200, 300, 400 \}$~м.
 			\end{small}
 		\end{column}
 	\end{columns}
@@ -253,11 +283,11 @@
 
 \begin{frame}
 	\MakeTitle{Исследование влияния слоя воздуха}
-	\textbf{Относительная разность решений при изменении глубины петли $h$:}
+	\textbf{Норма разности решений при изменении заглубления~$h$ источника электромагнитного поля:}
 	\begin{small}
 	\begin{table}[ht]
 		\begin{tabularx}{\textwidth}{|C{2.89}|C{0.73}|C{0.73}|C{0.73}|C{0.73}|C{0.73}|C{0.73}|C{0.73}|}
-			\hline Глубина петли & 5 & 10 & 50 & 100 & 200 & 300 & 400 \\
+			\hline $h$ & 5 & 10 & 50 & 100 & 200 & 300 & 400 \\
 			\hline $\displaystyle \frac{\| \mathbf{E}^{air} - \mathbf{E}^{noair} \|_{\mathbb{L}^2}}{\| \mathbf{E}^{air} \|_{\mathbb{L}^2}}$ & 0.44 & 0.40 & 0.24 & 0.14 & 0.07 & 0.04 & 0.02 \\
 			\hline
 		\end{tabularx}
@@ -439,7 +469,7 @@
 			$h_1=600$~м; $h_2=120$~м; \\
 			$h_3=75$~м; $l_1=400$~м; \\
 			$d=100$~м; $\nu=1$~Гц; $h=590$~м; \\
-			$l_2 \in \{ -200, -100, 0 \}$.
+			$l_2 \in \{ -200, -100, 0 \}$~м.
 			\end{small}
 		\end{column}
 	\end{columns}
